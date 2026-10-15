@@ -38,6 +38,8 @@ permissions: {}
 jobs:
   context:
     name: Select and validate smoke-test context
+    # Repository-level opt-in is checked before any runner is allocated.
+    if: vars.MAESTER_SMOKE_TESTS_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -259,8 +261,9 @@ jobs:
     name: Run ${{ needs.context.outputs.run_type }} published action (${{ matrix.os }})
     needs: context
     if: >-
-      needs.context.outputs.run_type == 'quick' ||
-      needs.context.outputs.run_type == 'full'
+      vars.MAESTER_SMOKE_TESTS_ENABLED == 'true' &&
+      (needs.context.outputs.run_type == 'quick' ||
+       needs.context.outputs.run_type == 'full')
     runs-on: ${{ matrix.os }}
     timeout-minutes: 45
     environment:

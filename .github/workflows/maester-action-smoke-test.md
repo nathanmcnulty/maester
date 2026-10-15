@@ -19,6 +19,26 @@ Microsoft Graph, action, result-integrity, tenant, or runner errors fail the
 workflow. The full run also accepts intentionally skipped tests but requires at
 least one public Graph check to complete.
 
+## Repository opt-in
+
+Smoke tests are disabled by default in this fork. Leave the repository variable
+`MAESTER_SMOKE_TESTS_ENABLED` unset or set to `false` unless the demo tenant,
+protected environment, and private report storage described below are ready.
+To opt in, set it to `true` under **Settings > Secrets and variables > Actions >
+Variables** in `nathanmcnulty/maester`. Use a **repository variable**, not an
+environment variable: the gate is evaluated before any runner or environment
+is allocated.
+
+The opt-in applies to scheduled, push, approved-review, and manual runs. When
+it is off, the review listener, context job, and Linux/Windows/macOS matrix are
+skipped without allocating runners. The quick-smoke check is not created, so
+do not make it a required status check while smoke tests are disabled.
+
+Enabling this variable does not provision credentials or grant access. The
+inherited report publisher still targets `maester365/maester-smoke-reports`;
+only enable it after the necessary tenant and report access are authorized and
+configured for this repository.
+
 ## Protected environment configuration
 
 In `maester365/maester`, create a GitHub Actions environment named exactly
