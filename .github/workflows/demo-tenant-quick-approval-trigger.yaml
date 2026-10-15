@@ -10,6 +10,7 @@ jobs:
   approved:
     name: Approved review received
     if: >-
+      vars.MAESTER_SMOKE_TESTS_ENABLED == 'true' &&
       github.event.review.state == 'approved' &&
       github.event.pull_request.base.ref == 'main' &&
       !github.event.pull_request.draft
